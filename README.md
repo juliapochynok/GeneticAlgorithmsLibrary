@@ -16,10 +16,16 @@ Unlike most optimization algorithms, genetic algorithms do not use derivatives t
 
 
 ## Library + Incoming and outgoing data
+
+### Library
+
+Our main function called find_minimum.
+
+If you are not familiar with the parameters and capabilities of the find_minimum function, we suggest you read the documentation.
+
 ### Data
 Receives an input function for optimization, GA parameters (population size, probability of mutations, etc.), way of parallelization(MPI, std::thread) and search for its minimum.
 
-### Library
 
 ## Genetic Algorithms
 Our genetic algorithm contains 7 parts:
@@ -42,14 +48,19 @@ Constructing the next generation - combining earlier selected and newly made ind
 
 In our GA Pairing, Mating and Mutation can be performed by several different approaches - details in the picture. So in result of mixing approaches of different parts among them, our library contains not just one GA, but 36 different combinations of stages, that roughly speaking is 36 different GAs.
 
-![](https://github.com/juliapochynok/GeneticAlgorithmsLibrary/blob/master/img/Screenshot%20from%202020-09-04%2010-59-09.png?raw=true)
-
+<img src="https://github.com/juliapochynok/GeneticAlgorithmsLibrary/blob/master/img/Screenshot%20from%202020-09-04%2010-59-09.png?raw=true" width="600">
 
 
 Note: swap mutation and inversion mutation - for functions with a large number of variables
 
 ## Paralization
 
+<img src="https://github.com/sophiakravchuk/GeneticAlgorithmsLibrary/blob/master/img/stages_mult_final.png" width="600" align="center">
+
+In our project, we used two types of multithreading: std::thread and MPI.
+
+
+Our parallelization consists of two parts, as it is shown in the image above. First of all, we are counting our resulting population in part Selection in threads. Also, the main process from Pairing to Mutation is held with pairs of individuals from the old population in multiple threads.
 
 ## Usage & Testing
 While testing all 36 different GAs we found the most optimal and the least optimal combinations of stages.
@@ -90,6 +101,40 @@ The least optimal combinations are:
 ## Run Dependencies
 To run the project you will need to download this repository and run command in command line. 
 
+
+In order to use our project as a library you need:
+1. Download the gal folder from this repository.
+2. Place it in the directory with libraries on your device (ubuntu users have /usr/share)
+3. In your project in Clion, create a folder named 'cmake'.
+4. In the folder, create a file called 'FindGAL.cmake'
+5. Copy the script below and paste into FindGAL.cmake, add your locations where requested(read text inside the stars, after inserting text, no stars should remain.)
+```
+set( FIND_GAL_PATHS *path to the gal folder (ubuntu users - /usr/share/gal)* )
+ 
+find_path( GAL_INCLUDE_DIR find_minimum.h
+           PATH_SUFFIXES include
+           PATHS ${FIND_GAL_PATHS} )
+find_library(GAL_LIBRARY
+               NAMES gal
+               PATH_SUFFIXES lib
+               PATHS ${FIND_GAL_PATHS} )
+ ```
+6. Paste the script below in your Cmakelist.txt file between sets (CMAKE_CXX_STANDARD X(X reder to standard of c++ that you use) ) and add_executable( ... )
+ 
+```
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+```
+7. Paste the script below in your Cmakelist.txt file after add_executable( ... )
+```
+include(FindPkgConfig)
+find_package(GAL REQUIRED)
+include_directories(${GAL_INCLUDE_DIR})
+target_link_libraries(${PROJECT_NAME} ${GAL_LIBRARY})
+
+```
+8.Make #include <find_minimum.h>
+
+9.Call a function in your code with the appropriate parameters (find_global_min ())
 
 ## Documentation
 
