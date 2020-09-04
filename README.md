@@ -18,10 +18,9 @@ Unlike most optimization algorithms, genetic algorithms do not use derivatives t
 ## Library + Incoming and outgoing data
 
 ### Library
+This library is designed to find the global minimum of a function using the benefits of genetic algorithms and is optimized in two ways. Our main function called find_global_minimum.
 
-Our main function called find_minimum.
-
-If you are not familiar with the parameters and capabilities of the find_minimum function, we suggest you read the documentation.
+If you are not familiar with the parameters and capabilities of the find_global_minimum function, we suggest you read the documentation.
 
 ### Data
 Receives an input function for optimization, GA parameters (population size, probability of mutations, etc.), way of parallelization(MPI, std::thread) and search for its minimum.
